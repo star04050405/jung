@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>jung. 愿望成真</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon-180.png">
+<link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:Georgia,"Songti SC","STSong","SimSun",serif;
+ background:#F2E7CF;color:#2A2119;
+ padding:0 20px calc(44px + env(safe-area-inset-bottom));
+ background-image:radial-gradient(rgba(120,90,40,.05) 1px,transparent 1px);
+ background-size:22px 22px}
+.gold{color:#A2782F}
+.red{color:#6E1C25}
+header{padding:34px 2px 8px;text-align:center}
+.eyebrow{font-size:.66rem;letter-spacing:.4em;color:#A2782F;font-family:Courier,monospace}
+h1{font-size:2.55rem;line-height:1.08;letter-spacing:.02em;margin:10px 0 4px;color:#6E1C25}
+.sub{font-size:.8rem;color:#8A7A5E;letter-spacing:.14em}
+.rule{height:1px;background:linear-gradient(90deg,transparent,#A2782F88,transparent);margin:20px 0}
+/* 名言卷轴 */
+.quote{background:#F8F0DC;border:1px solid #C8AC6E;border-radius:6px;
+ padding:26px 22px;text-align:center;box-shadow:0 2px 14px rgba(110,28,37,.07);position:relative}
+.quote:before{content:"❦";color:#A2782F;font-size:1.1rem;display:block;margin-bottom:10px}
+.quote .q{font-size:1.16rem;line-height:1.85;color:#6E1C25;font-style:italic}
+.quote .qa{margin-top:10px;font-size:.68rem;letter-spacing:.26em;color:#8A7A5E;font-family:Courier,monospace}
+/* 段落标题 */
+h2{display:flex;align-items:center;gap:10px;margin:42px 0 6px;color:#6E1C25;
+ font-size:1.22rem;letter-spacing:.1em}
+h2:before,h2:after{content:"";flex:1;height:1px;background:#C8AC6E66}
+.lead{font-size:.78rem;color:#8A7A5E;text-align:center;margin-bottom:14px;letter-spacing:.05em}
+p.body{line-height:2.05;font-size:.92rem;margin:10px 0;color:#3A3024}
+/* 四步手抄本章节 */
+.step{margin:26px 0;background:#F8F0DC;transform:rotate(-.35deg);border:1px solid #D8C08A;border-radius:6px;padding:22px 20px 18px;position:relative}
+.step:nth-child(even){transform:rotate(.3deg)}
+.step .rn{position:absolute;top:-17px;left:16px;background:#F2E7CF;padding:0 10px;
+ color:#A2782F;font-size:1.5rem;letter-spacing:.08em}
+.step h3{color:#6E1C25;font-size:1.12rem;letter-spacing:.08em;margin-bottom:2px}
+.step .en{font-size:.6rem;letter-spacing:.3em;color:#A2782F;font-family:Courier,monospace;margin-bottom:12px}
+.step p{line-height:2;font-size:.9rem;color:#3A3024}
+.dropcap:first-letter{font-size:2.5em;float:left;line-height:.9;padding:2px 8px 0 0;color:#6E1C25;font-style:italic}
+.example{margin:12px 0 0;padding:10px 14px;border-left:2px solid #A2782F;transform:rotate(-.6deg);
+ background:#F2E7CF;font-size:.82rem;line-height:1.9;color:#5E4E32;font-style:italic}
+/* 练习簿 */
+.write{background:#F8F0DC;border:1px solid #D8C08A;border-radius:6px;padding:20px 18px;margin:14px 0}
+.write .wq{color:#6E1C25;font-size:1rem;line-height:1.8;margin-bottom:4px}
+.write .hint{font-size:.7rem;color:#8A7A5E;margin-bottom:12px;letter-spacing:.04em}
+textarea{width:100%;min-height:96px;border:none;border-bottom:1px solid #C8AC6E;
+ background:repeating-linear-gradient(transparent,transparent 29px,#D8C08A55 29px,#D8C08A55 30px);
+ font-family:Georgia,"Songti SC",serif;font-size:16px;line-height:30px;color:#2A2119;outline:none;resize:vertical;padding:0 2px}
+textarea:focus{border-color:#A2782F}
+.wbtn{display:block;width:100%;margin-top:12px;padding:12px 0;background:#6E1C25;color:#F2E7CF;
+ border:none;border-radius:3px;font-family:inherit;font-size:.85rem;letter-spacing:.3em;cursor:pointer}
+.wbtn:active{transform:translateY(1px)}
+.wsaved{font-size:.68rem;color:#8A5A20;text-align:right;margin-top:8px;letter-spacing:.12em;font-style:italic}
+/* 十日格 */
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:14px}
+.day{aspect-ratio:1;border:1px solid #C8AC6E;border-radius:50%;background:#F8F0DC;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+ color:#8A7A5E;font-family:Courier,monospace;position:relative}
+.day .dn{font-size:.95rem}
+.day .dl{font-size:.5rem;letter-spacing:.12em;margin-top:2px}
+.day.on{background:#6E1C25;border-color:#6E1C25;color:#F2E7CF}
+.day.on:after{content:"✦";position:absolute;top:3px;right:7px;color:#C9A227;font-size:.55rem}
+.dayprg{font-size:.72rem;color:#8A7A5E;margin-top:12px;text-align:center;letter-spacing:.14em;font-family:Courier,monospace}
+/* 今日三问 */
+.three{display:flex;gap:8px;margin-top:14px}
+.tq{flex:1;background:#F8F0DC;border:1px dashed #C8AC6E;border-radius:6px;padding:12px 8px;text-align:center}
+.tq .a{color:#A2782F;font-size:.85rem;font-family:Courier,monospace}
+.tq .b{font-size:.7rem;color:#6E1C25;margin-top:4px;letter-spacing:.05em}
+/* 彩章 */
+.seal{margin:34px auto 0;width:150px;height:150px;border:2px solid #A2782F;border-radius:50%;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;color:#A2782F;
+ transform:rotate(-8deg);opacity:0;transition:opacity .8s;font-family:Courier,monospace}
+.seal.show{opacity:1}
+.seal .s1{font-size:.6rem;letter-spacing:.2em}
+.seal .s2{font-size:.9rem;letter-spacing:.3em;margin:5px 0}
+.seal .s3{font-size:.5rem;letter-spacing:.14em}
+/* 出处 */
+.origin{margin-top:36px;background:#EFE2C4;border-radius:6px;padding:18px 16px}
+.origin .ot{font-size:.62rem;letter-spacing:.3em;color:#A2782F;font-family:Courier,monospace;margin-bottom:10px}
+.origin p{font-size:.74rem;line-height:1.95;color:#6E5A38}
+.origin .oq{color:#6E1C25;font-style:italic}
+footer{margin-top:34px;text-align:center;font-size:.62rem;color:#9A8866;letter-spacing:.22em;line-height:2.2}
+#toast{position:fixed;left:50%;top:46%;transform:translateX(-50%) translateY(20px);
+ background:rgba(110,28,37,.94);color:#F2E7CF;padding:10px 22px;border-radius:4px;
+ font-size:.78rem;letter-spacing:.1em;opacity:0;pointer-events:none;transition:all .35s;z-index:9;font-family:Georgia,"Songti SC",serif}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.med{margin-top:20px;font-size:.64rem;color:#9A8866;line-height:1.8;text-align:center}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">CARL GUSTAV JUNG · 1875—1961</div>
+ <h1>jung.</h1>
+ <div class="sub">愿望成真 · 与潜意识对话的四步法</div>
+</header>
+
+<div class="quote">
+ <div class="q">「未被觉察的潜意识，<br>就是你的命运。」</div>
+ <div class="qa">AS ATTRIBUTED, WIDELY CIRCULATED</div>
+</div>
+
+<p class="body" style="text-align:center;font-size:.8rem;color:#8A7A5E">
+X 上疯传的「荣格让愿望成真的方法」，原型是他 1913–1916 年间<br>
+发展出的<strong class="gold">积极想象 Active Imagination</strong>——<br>
+荣格自己用它写下、画下的那本手稿，就是《红书》。</p>
+
+<div class="rule"></div>
+
+<h2>四 步 法</h2>
+<div class="lead">不靠肯定语，不喊口号——先让潜意识开口</div>
+
+<div class="step">
+ <div class="rn">I</div>
+ <h3>诚实之问</h3>
+ <div class="en">THE HONEST QUESTION</div>
+ <p class="dropcap">问自己一个问题，问到底：<strong>「如果我不再假装不想要——我真正想要的是什么？」</strong>不是听起来现实的，不是焦虑觉得安全的，是真实的。无意识里压着的，恰恰是这个被你一次次改名为「不必要」的真愿望。</p>
+</div>
+
+<div class="step">
+ <div class="rn">II</div>
+ <h3>让潜意识先说话</h3>
+ <div class="en">SPEAK IN IMAGES, NOT LOGIC</div>
+ <p class="dropcap">心理不通过逻辑改变，它通过<strong>意象、象征、想象</strong>改变。所以不要只说「我想要平静」，而要去想象具体的、身体能感到的画面——</p>
+ <div class="example">「我醒来的时候，胸口是敞开的。」</div>
+</div>
+
+<div class="step">
+ <div class="rn">III</div>
+ <h3>找出埋藏的愿望</h3>
+ <div class="en">THE BURIED WISH, AS A FAIRY TALE</div>
+ <p class="dropcap">你不肯让自己想的，是哪一个愿望？被压抑的愿望会披着焦虑的外衣回来。童话从来都从一个愿望开始：孩子想离开高塔，王子想打破咒语，女孩想回家。给你的愿望<strong>一个图像、一个故事的形状</strong>——因为愿望从来不只是「得到什么」，是「成为谁」。</p>
+</div>
+
+<div class="step">
+ <div class="rn">IV</div>
+ <h3>画下它，然后住进去</h3>
+ <div class="en">DRAW IT, THEN LIVE IN IT</div>
+ <p class="dropcap">用笔把那个图像画下来——不必画得好，只要让它从模糊变得可见。然后连续<strong>十天</strong>，每天清晨两分钟，闭上眼睛走进画里：当作身体感受，不是幻想。感觉尴尬不是失败，是神经系统正在离开旧身份。</p>
+</div>
+
+<h2>练 习 簿</h2>
+<div class="lead">把方法变成纸上的两页 · 全部存在你的本机</div>
+
+<div class="write">
+ <div class="wq">如果我不再假装不想要，我真正想要的是——</div>
+ <div class="hint">第 I 步 · 诚实之问 · 允许它不切实际</div>
+ <textarea id="wish" placeholder="写在这里…"></textarea>
+ <button class="wbtn" onclick="saveW('wish')">写 下</button>
+ <div class="wsaved" id="wstamp1"></div>
+</div>
+
+<div class="write">
+ <div class="wq">把它变成画面——醒来时，我的身体是……</div>
+ <div class="hint">第 II · III 步 · 用图像写，不用道理 · 也可以真的画下来</div>
+ <textarea id="image" placeholder="写在这里…"></textarea>
+ <button class="wbtn" onclick="saveW('image')">画 下</button>
+ <div class="wsaved" id="wstamp2"></div>
+</div>
+
+<div class="write">
+ <div class="wq">十日练习 · 每天清晨两分钟，走进你的画面</div>
+ <div class="hint">第 IV 步 · 自由顺序 · 点亮已经完成的日子</div>
+ <div class="days" id="days"></div>
+ <div class="dayprg" id="dayprg">已走进画面 0 / 10 天</div>
+ <div class="three">
+  <div class="tq"><div class="a">Q1</div><div class="b">我怎么走路？</div></div>
+  <div class="tq"><div class="a">Q2</div><div class="b">我怎么说话？</div></div>
+  <div class="tq"><div class="a">Q3</div><div class="b">我怎么呼吸？</div></div>
+ </div>
+</div>
+
+<div class="seal" id="seal">
+ <div class="s1">LIBER NOVUS</div>
+ <div class="s2">✦ 红书 ✦</div>
+ <div class="s3">EST. YOUR OWN</div>
+</div>
+
+<div class="origin">
+ <div class="ot">TRUE ORIGIN · 名言考古</div>
+ <p>「愿望成真」的说法是 X 时代的转述；这句「潜意识即命运」也几乎从不逐字出现在荣格著作里。最接近的原文出自《Aion》（1951）：</p>
+ <p class="oq">「当一种内在情境未被觉察，它就会在外部发生，成为命运。」<br>The psychological rule says that when an inner situation is not made conscious, it happens outside, as fate.</p>
+ <p>积极想象确为荣格本人所创（1913–1916），《红书》即其练习手稿；「四步法」与「十日练习」为后世整理的通俗版本。</p>
+</div>
+
+<div class="med">心理练习不能替代心理治疗。若长期处于强烈痛苦，请寻求专业帮助。</div>
+<footer>jung. — FOR THE WISH BENEATH THE ANXIETY<br>NOT AFFILIATED WITH ANY INSTITUTE</footer>
+<div id="toast"></div>
+
+<script>
+var LS='jung_log';
+var log={};
+try{log=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){}
+function save(){localStorage.setItem(LS,JSON.stringify(log))}
+function nowStamp(){var d=new Date();return d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate()}
+function saveW(id){
+ var v=document.getElementById(id).value.trim();
+ log[id]=v;save();
+ document.getElementById(id==='wish'?'wstamp1':'wstamp2').textContent=v?('WRITTEN · '+nowStamp()):'';
+ toast(v?(id==='wish'?'愿望已写下':'画面已写下'):'先写点什么再落下');
+}
+var tt;
+function toast(s){var t=document.getElementById('toast');t.textContent=s;t.classList.add('show');
+ clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2200)}
+function renderW(){
+ document.getElementById('wish').value=log.wish||'';
+ document.getElementById('image').value=log.image||'';
+ if(log.wish)document.getElementById('wstamp1').textContent='WRITTEN · '+(log.wt||nowStamp());
+ if(log.image)document.getElementById('wstamp2').textContent='WRITTEN · '+(log.it||nowStamp());
+}
+function renderDays(){
+ var el=document.getElementById('days');el.innerHTML='';
+ var days=log.days||[];
+ for(var i=1;i<=10;i++){
+  (function(n){
+   var d=document.createElement('div');
+   d.className='day'+(days.indexOf(n)>=0?' on':'');
+   d.innerHTML='<div class="dn">'+n+'</div><div class="dl">DAY</div>';
+   d.onclick=function(){markDay(n)};
+   el.appendChild(d);
+  })(i);
+ }
+ document.getElementById('dayprg').textContent='已走进画面 '+(log.days||[]).length+' / 10 天';
+ if((log.days||[]).length===10){document.getElementById('seal').classList.add('show')}
+ else{document.getElementById('seal').classList.remove('show')}
+}
+function markDay(n){
+ log.days=log.days||[];
+ var i=log.days.indexOf(n);
+ if(i>=0){log.days.splice(i,1);toast('第 '+n+' 天已擦去')}
+ else{log.days.push(n);toast('DAY '+n+' — 已走进画面')}
+ save();renderDays();
+}
+renderW();renderDays();
+</script>
+</body>
+</html>
